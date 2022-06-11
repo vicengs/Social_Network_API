@@ -1,11 +1,19 @@
+/* ----------------------------- */
+/* Project  : Social Network API */
+/* File     : routes/index.js    */
+/* Author   : Vicente Garcia     */
+/* Date     : 06/10/2022         */
+/* Modified : 06/10/2022         */
+/* ----------------------------- */
+// Declare router as express router
 const router = require('express').Router();
-// Import all of the API routes from /api/index.js (no need for index.js though since it's implied)
+// Import all of the API routes from /api/index.js
 const apiRoutes = require('./api');
-const htmlRoutes = require('./html/html-routes');
-// add prefix of `/api` to all of the api routes imported from the `api` directory
+// Set preffix to routes
 router.use('/api', apiRoutes);
-router.use('/', htmlRoutes);
+// Invoke routes
 router.use((req, res) => {
-  res.status(404).send('<h1>😝 404 Error!</h1>');
+    res.status(404).send('<h1>404 Error</h1>');
 });
+// Export router to be used in all the project
 module.exports = router;

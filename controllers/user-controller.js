@@ -1,70 +1,123 @@
-const { Pizza } = require('../models');
-const pizzaController = {
-    // get all pizzas
-    getAllPizza(req, res) {
-        Pizza.find({})
+/* ----------------------------- */
+/* Project  : Social Network API */
+/* File     : user-controller.js */
+/* Author   : Vicente Garcia     */
+/* Date     : 06/10/2022         */
+/* Modified : 06/11/2022         */
+/* ----------------------------- */
+const { Console } = require('console');
+const { User, Thought } = require('../models');
+const userController = {
+    // Get all users
+    getAllUser(req, res) {
+        User.find({})
         .populate({
-            path: 'comments',
-            select: '-__v'
+            path: 'thoughts'
+           ,select: '-__v'
+        })
+        .populate({
+            path: 'friends'
+           ,select: '-__v'
         })
         .select('-__v')
         .sort({ _id: -1 })
-        .then(dbPizzaData => res.json(dbPizzaData))
+        .then(dbUserData => res.json(dbUserData))
         .catch(err => {
             console.log(err);
             res.status(400).json(err);
         });
     },
-    // get one pizza by id
-    getPizzaById({ params }, res) {
-        Pizza.findOne({ _id: params.id })
+    // Get one user by id
+    getUserById({ params }, res) {
+        User.findOne({ _id: params.userId })
         .populate({
-            path: 'comments',
-            select: '-__v'
+            path: 'thoughts'
+           ,select: '-__v'
+        })
+        .populate({
+            path: 'friends'
+           ,select: '-__v'
         })
         .select('-__v')
-        .then(dbPizzaData => {
-            // If no pizza is found, send 404
-            if (!dbPizzaData) {
-                res.status(404).json({ message: 'No pizza found with this id!' });
+        .then(dbUserData => {
+            // If no user is found, send 404
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id!' });
                 return;
             }
-            res.json(dbPizzaData);
+            res.json(dbUserData);
         })
         .catch(err => {
             console.log(err);
             res.status(400).json(err);
         });
     },
-    // createPizza
-    createPizza({ body }, res) {
-        Pizza.create(body)
-        .then(dbPizzaData => res.json(dbPizzaData))
+    // Create user
+    createUser({ body }, res) {
+        User.create(body)
+        .then(dbUserData => res.json(dbUserData))
         .catch(err => res.status(400).json(err));
     },
-    // update pizza by id
-    updatePizza({ params, body }, res) {
-        Pizza.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
-        .then(dbPizzaData => {
-            if (!dbPizzaData) {
-                res.status(404).json({ message: 'No pizza found with this id!' });
+    // Update user by id
+    updateUser({ params, body }, res) {
+        User.findOneAndUpdate({ _id: params.userId }, body, { new: true, runValidators: true })
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id!' });
                 return;
             }
-            res.json(dbPizzaData);
+            res.json(dbUserData);
         })
         .catch(err => res.status(400).json(err));
     },
-    // delete pizza
-    deletePizza({ params }, res) {
-        Pizza.findOneAndDelete({ _id: params.id })
-        .then(dbPizzaData => {
-            if (!dbPizzaData) {
-                res.status(404).json({ message: 'No pizza found with this id!' });
+    // Delete user
+    deleteUser({ params }, res) {
+        User.findOneAndDelete({ _id: params.userId })
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id!' });
                 return;
             }
-            res.json(dbPizzaData);
+            if (dbUserData.thoughts.length > 0){
+                for (i = 0; i < dbUserData.thoughts.length; i++){
+                    Thought.findOneAndDelete({ _id: dbUserData.thoughts[i]._id })
+                    .then(dbThoughtData => {console.log("Delete thoughts")})
+                }
+            }
+            res.json(dbUserData);
         })
         .catch(err => res.status(400).json(err));
-    }  
+    },
+    // Create friend
+    createFriend({ params, body }, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId }
+           ,{ $push: { friends: params.friendId } }
+           ,{ new: true, runValidators: true })
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id!' });
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => res.status(400).json(err));
+    },
+    // Delete Friend
+    deleteFriend({ params, body }, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId }
+           ,{ $pull: { friends: params.friendId } }
+           ,{ new: true, runValidators: true })
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id!' });
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => res.status(400).json(err));
+    }
 }
-module.exports = pizzaController;
+// Export user controller to be used for all the project
+module.exports = userController;
