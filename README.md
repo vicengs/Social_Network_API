@@ -38,7 +38,7 @@ Check the routes in insomnia.
 
 ## Walkthrough Video
 
-https://drive.google.com/file/d/15wT93WhY0XZ1b0qDd1PqyP4tzQUK73xl/view
+- https://drive.google.com/file/d/15wT93WhY0XZ1b0qDd1PqyP4tzQUK73xl/view
 
 ## Contributing
 
