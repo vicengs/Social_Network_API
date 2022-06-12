@@ -33,6 +33,7 @@ Clone repository to local machine to use local.
 ## Usage
 
 Execute on project path the following command "npm start" to initialize server.
+
 Check the routes in insomnia.
 
 ## Walkthrough Video
@@ -76,4 +77,5 @@ MIT License - A short and simple permissive license with conditions only requiri
 ## Screenshots
     
 ![Application](/assets/images/application.jpg)
+
 ![Insomnia](/assets/images/insomnia.jpg)
