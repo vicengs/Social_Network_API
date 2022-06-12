@@ -64,7 +64,7 @@ const thoughtController = {
                    ,{ $push: { thoughts: dbThoughtData._id } }
                    ,{ new: true }
                 )
-                .then(res.json(abc))
+                .then(res.json(dbThoughtData))
             })
         })
         .catch(err => res.json(err));
