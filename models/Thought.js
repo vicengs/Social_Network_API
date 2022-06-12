@@ -6,9 +6,9 @@
 /* Modified : 06/10/2022         */
 /* ----------------------------- */
 // Import function to date format
-const dateFormat = require('../utils/dateFormat');
+const dateFormat = require("../utils/dateFormat");
 // Import schema, model and types from mongoose
-const { Schema, model, Types } = require('mongoose');
+const { Schema, model, Types } = require("mongoose");
 // Create Reaction schema
 const ReactionSchema = new Schema({
     // Set custom id to avoid confusion with parent thought _id
@@ -19,7 +19,7 @@ const ReactionSchema = new Schema({
    ,reactionBody: {
         type: String
        ,required: true
-       ,max: [280, 'Must be maximum 280, got {VALUE}']
+       ,max: [280, "Must be maximum 280, got {VALUE}"]
     }
     ,userName: {
         type: String
@@ -44,8 +44,8 @@ const ThoughtSchema = new Schema({
     thoughtText: {
         type: String
         ,required: true
-        ,min: [1, 'Must be at least 1, got {VALUE}']
-        ,max: [280, 'Must be maximum 280, got {VALUE}']
+        ,min: [1, "Must be at least 1, got {VALUE}"]
+        ,max: [280, "Must be maximum 280, got {VALUE}"]
     }
    ,userName: {
         type: String
@@ -67,10 +67,10 @@ const ThoughtSchema = new Schema({
    ,id: false
 });
 // Get total count of reactions
-ThoughtSchema.virtual('reactionCount').get(function() {
+ThoughtSchema.virtual("reactionCount").get(function() {
     return this.reactions.length;
 });
 // create the Thought model using the ThoughtSchema
-const Thought = model('Thought', ThoughtSchema);
+const Thought = model("Thought", ThoughtSchema);
 // Export the Thought model
 module.exports = Thought;
